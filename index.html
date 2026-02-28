@@ -1,744 +1,1218 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Oscar DJIHOKIN — H4RRYPHANTOM</title>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <title>Oscar DJIHOKIN — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
+    /* ═══════════════════════════════════════
+       VARIABLES & RESET
+    ═══════════════════════════════════════ */
     :root {
-      --bg: #050d17;
-      --bg2: #08111f;
-      --surface: #0d1e30;
-      --surface2: #112236;
-      --accent: #00c8ff;
-      --accent2: #0055ff;
-      --accent3: #00ff99;
-      --text: #d4e8f5;
-      --muted: #4a7a9b;
-      --border: #1a3550;
-      --glow: 0 0 20px rgba(0,200,255,0.25);
+      --bg:       #f5f2ec;
+      --ink:      #0e0e0e;
+      --ink2:     #2a2a2a;
+      --muted:    #888;
+      --rule:     #d8d3ca;
+      --accent:   #1a1aff;
+      --accent-h: #0000cc;
+      --warm:     #e8e2d6;
+      --card:     #eeead9;
+      --white:    #fff;
+      --serif:    'Instrument Serif', Georgia, serif;
+      --mono:     'DM Mono', monospace;
+      --sans:     'Manrope', sans-serif;
+      --display:  'Bebas Neue', sans-serif;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; font-size: 16px; }
 
     body {
       background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 15px;
-      line-height: 1.7;
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 400;
+      line-height: 1.65;
       overflow-x: hidden;
     }
 
-    /* ── NOISE OVERLAY ── */
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none; z-index: 9999; opacity: 0.35;
+    ::selection { background: var(--accent); color: #fff; }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-thumb { background: var(--accent); }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ═══════════════════════════════════════
+       CURSOR FOLLOWER
+    ═══════════════════════════════════════ */
+    #cursor {
+      width: 10px; height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, opacity 0.2s;
+      transform: translate(-50%, -50%);
     }
-
-    /* ── GRID BACKGROUND ── */
-    body::after {
-      content: '';
-      position: fixed; inset: 0;
-      background-image:
-        linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none; z-index: 0;
+    #cursor-ring {
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all 0.12s ease;
+      opacity: 0.5;
     }
+    body:hover #cursor { opacity: 1; }
 
-    /* ── SCROLLBAR ── */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 2px; }
-
-    /* ── NAV ── */
+    /* ═══════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════ */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 500;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 3rem;
-      background: rgba(5,13,23,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 4rem;
+      background: rgba(245,242,236,0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--rule);
     }
-    .nav-logo {
-      font-family: 'Share Tech Mono', monospace;
-      color: var(--accent);
-      font-size: 1rem;
-      letter-spacing: 0.05em;
+    .nav-id {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      color: var(--ink2);
     }
-    .nav-logo span { color: var(--accent3); }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-id span { color: var(--accent); }
+    .nav-links {
+      display: flex; gap: 2.5rem; list-style: none;
+    }
     .nav-links a {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--muted);
-      text-decoration: none;
+      font-family: var(--mono);
+      font-size: 0.68rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
+      color: var(--muted);
       transition: color 0.2s;
+      position: relative;
     }
-    .nav-links a:hover { color: var(--accent); }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width 0.25s ease;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a:hover::after { width: 100%; }
 
-    /* ── HERO ── */
+    .nav-cta {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      padding: 0.5rem 1.2rem;
+      background: var(--accent);
+      color: #fff !important;
+      border-radius: 2px;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--accent-h) !important; }
+    .nav-cta::after { display: none !important; }
+
+    /* ═══════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════ */
     #hero {
       min-height: 100vh;
-      display: flex; flex-direction: column; justify-content: center;
-      padding: 6rem 3rem 4rem;
-      position: relative; z-index: 1;
-      max-width: 1100px; margin: 0 auto;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      padding: 9rem 4rem 4rem;
+      position: relative;
+      border-bottom: 1px solid var(--rule);
+      overflow: hidden;
     }
 
-    .hero-tag {
-      font-family: 'Share Tech Mono', monospace;
+    .hero-bg-text {
+      position: absolute;
+      bottom: -0.05em; left: -0.02em;
+      font-family: var(--display);
+      font-size: clamp(10rem, 22vw, 22rem);
+      color: transparent;
+      -webkit-text-stroke: 1px var(--rule);
+      pointer-events: none;
+      line-height: 1;
+      white-space: nowrap;
+      z-index: 0;
+      user-select: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 900px; }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
       font-size: 0.7rem;
-      color: var(--accent3);
-      letter-spacing: 0.2em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
+      color: var(--accent);
       margin-bottom: 1.5rem;
       opacity: 0;
-      animation: fadeUp 0.6s ease 0.2s forwards;
+      animation: rise 0.7s ease 0.1s forwards;
     }
-    .hero-tag::before { content: '> '; color: var(--muted); }
 
     h1.hero-name {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(3rem, 8vw, 7rem);
-      font-weight: 800;
-      line-height: 0.9;
-      color: #fff;
+      font-family: var(--display);
+      font-size: clamp(4.5rem, 11vw, 10rem);
+      line-height: 0.92;
+      color: var(--ink);
+      letter-spacing: 0.01em;
       opacity: 0;
-      animation: fadeUp 0.7s ease 0.35s forwards;
+      animation: rise 0.8s ease 0.25s forwards;
     }
-    h1.hero-name .accent { color: var(--accent); }
-    h1.hero-name .dim { color: var(--muted); font-weight: 400; font-size: 0.55em; display: block; margin-top: 0.2em; }
-
-    .hero-pseudo {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 1.1rem;
-      color: var(--accent2);
-      margin-top: 1.5rem;
-      opacity: 0;
-      animation: fadeUp 0.7s ease 0.5s forwards;
-    }
-    .hero-pseudo::before { content: '// '; color: var(--muted); }
-
-    .hero-bio {
-      max-width: 640px;
-      color: #7ba3bf;
-      font-size: 0.95rem;
-      margin-top: 1.5rem;
-      font-weight: 300;
-      opacity: 0;
-      animation: fadeUp 0.7s ease 0.65s forwards;
-      border-left: 2px solid var(--accent2);
-      padding-left: 1rem;
-    }
-
-    .hero-certs {
-      display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;
-      opacity: 0; animation: fadeUp 0.7s ease 0.8s forwards;
-    }
-    .cert-badge {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      padding: 0.4rem 0.9rem;
-      border: 1px solid var(--accent3);
-      color: var(--accent3);
-      border-radius: 2px;
-      text-transform: uppercase;
-    }
-
-    .hero-scroll {
-      margin-top: 4rem;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.65rem;
+    h1.hero-name .alt {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.6em;
       color: var(--muted);
-      letter-spacing: 0.15em;
-      display: flex; align-items: center; gap: 0.75rem;
-      opacity: 0; animation: fadeUp 0.7s ease 1s forwards;
-    }
-    .hero-scroll::after { content: ''; display: block; width: 60px; height: 1px; background: var(--border); }
-
-    /* ── SECTIONS ── */
-    .section {
-      max-width: 1100px; margin: 0 auto;
-      padding: 5rem 3rem;
-      position: relative; z-index: 1;
+      display: block;
+      letter-spacing: 0;
     }
 
-    .section-label {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--accent);
-      letter-spacing: 0.2em;
+    .hero-tagline {
+      margin-top: 2.5rem;
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--ink2);
+      max-width: 560px;
+      line-height: 1.7;
+      border-left: 3px solid var(--accent);
+      padding-left: 1.25rem;
+      opacity: 0;
+      animation: rise 0.8s ease 0.4s forwards;
+    }
+
+    .hero-actions {
+      margin-top: 3rem;
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0;
+      animation: rise 0.8s ease 0.55s forwards;
+    }
+
+    .btn-primary {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
+      padding: 0.9rem 2rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--accent-h); transform: translateY(-2px); }
+
+    .btn-secondary {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.9rem 2rem;
+      background: transparent;
+      color: var(--ink);
+      border: 1.5px solid var(--rule);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-secondary:hover { border-color: var(--ink); transform: translateY(-2px); }
+
+    .hero-meta {
+      display: flex; gap: 3rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--rule);
+      position: relative; z-index: 1;
+      opacity: 0;
+      animation: rise 0.8s ease 0.7s forwards;
+    }
+    .hero-stat-num {
+      font-family: var(--display);
+      font-size: 2.8rem;
+      line-height: 1;
+      color: var(--accent);
+    }
+    .hero-stat-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    /* ═══════════════════════════════════════
+       LAYOUT HELPERS
+    ═══════════════════════════════════════ */
+    .wrap {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 4rem;
+    }
+
+    section { padding: 7rem 0; border-bottom: 1px solid var(--rule); }
+
+    .sec-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
       margin-bottom: 0.5rem;
     }
-    .section-label::before { content: '[ '; }
-    .section-label::after { content: ' ]'; }
 
-    h2.section-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(1.8rem, 3vw, 2.5rem);
-      font-weight: 800;
-      color: #fff;
+    h2.sec-title {
+      font-family: var(--display);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1;
+      color: var(--ink);
       margin-bottom: 3rem;
     }
-    h2.section-title .line {
-      display: block;
-      width: 40px; height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
+
+    /* ═══════════════════════════════════════
+       ABOUT
+    ═══════════════════════════════════════ */
+    #about .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .about-text p {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--ink2);
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+    }
+    .about-text p strong { font-weight: 600; color: var(--ink); }
+
+    .about-certs {
+      margin-top: 2rem;
+      display: flex; flex-direction: column; gap: 0.75rem;
+    }
+    .cert-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 1.1rem;
+      background: var(--card);
+      border-radius: 3px;
+      border-left: 3px solid var(--accent);
+    }
+    .cert-row-name {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .cert-row-badge {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(26,26,255,0.07);
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+    }
+
+    /* ═══════════════════════════════════════
+       SKILLS
+    ═══════════════════════════════════════ */
+    #skills { background: var(--warm); }
+
+    .skills-block { margin-bottom: 3rem; }
+    .skills-block:last-child { margin-bottom: 0; }
+
+    .skills-block-title {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 1.25rem;
+    }
+
+    .skills-tags {
+      display: flex; flex-wrap: wrap; gap: 0.6rem;
+    }
+    .skill-tag {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      padding: 0.45rem 1rem;
+      border: 1.5px solid var(--rule);
+      color: var(--ink2);
+      border-radius: 2px;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      cursor: default;
+    }
+    .skill-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(26,26,255,0.05);
+    }
+
+    /* ═══════════════════════════════════════
+       PROJECTS
+    ═══════════════════════════════════════ */
+    .project-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 2rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--rule);
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .project-item:first-child { border-top: 1px solid var(--rule); }
+
+    .project-num {
+      font-family: var(--display);
+      font-size: 3.5rem;
+      line-height: 1;
+      color: var(--rule);
+      transition: color 0.25s;
+      padding-top: 0.2rem;
+    }
+    .project-item:hover .project-num { color: var(--accent); }
+
+    .project-body {}
+    .project-top {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+    h3.project-name {
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+    .project-tags {
+      display: flex; gap: 0.4rem; flex-wrap: wrap; flex-shrink: 0;
+    }
+    .ptag {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid var(--rule);
+      color: var(--muted);
+      border-radius: 2px;
+    }
+    .project-summary {
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    /* Expandable */
+    .project-detail {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.45s ease;
+    }
+    .project-detail.open { max-height: 600px; }
+    .project-detail-inner {
+      padding-top: 1.25rem;
+    }
+    .project-detail-inner ul {
+      list-style: none; padding: 0;
+      margin-bottom: 1rem;
+    }
+    .project-detail-inner ul li {
+      font-size: 0.86rem; font-weight: 300;
+      color: var(--ink2);
+      padding: 0.3rem 0 0.3rem 1.2rem;
+      position: relative;
+      border-bottom: 1px solid var(--rule);
+    }
+    .project-detail-inner ul li::before {
+      content: '—';
+      position: absolute; left: 0;
+      color: var(--accent);
+    }
+    .project-result-box {
+      background: var(--card);
+      border-left: 3px solid var(--accent);
+      padding: 0.85rem 1.1rem;
+      font-size: 0.84rem;
+      font-weight: 300;
+      color: var(--ink2);
+      margin-bottom: 0.75rem;
+    }
+    .project-stack {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .project-stack strong { color: var(--accent); }
+
+    .project-toggle-btn {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none; border: none;
+      cursor: pointer; padding: 0;
+      margin-top: 0.75rem;
+      transition: color 0.2s;
+    }
+    .project-toggle-btn:hover { color: var(--accent); }
+
+    /* ═══════════════════════════════════════
+       CONTACT (CTA)
+    ═══════════════════════════════════════ */
+    #contact { background: var(--ink); color: #fff; border-bottom: none; }
+    #contact .sec-label { color: rgba(255,255,255,0.4); }
+    #contact h2.sec-title { color: #fff; }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .contact-pitch {
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-links { display: flex; flex-direction: column; gap: 0.75rem; }
+    .contact-link-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 3px;
+      color: #fff;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .contact-link-row:hover {
+      border-color: var(--accent);
+      background: rgba(26,26,255,0.1);
+    }
+    .clr-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 0.15rem;
+    }
+    .clr-value {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .clr-arrow {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      transition: transform 0.2s;
+    }
+    .contact-link-row:hover .clr-arrow { transform: translateX(4px); }
+
+    /* FORM */
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .form-group input,
+    .form-group textarea {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 2px;
+      padding: 0.75rem 1rem;
+      color: #fff;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      font-weight: 300;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--accent); }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(255,255,255,0.2); }
+    .form-group textarea { min-height: 120px; }
+
+    .btn-submit {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 1rem 2rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      align-self: flex-start;
+    }
+    .btn-submit:hover { background: #3333ff; transform: translateY(-2px); }
+
+    #form-success {
+      display: none;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: #6effb4;
       margin-top: 0.5rem;
     }
 
-    /* ── SKILLS ── */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 1rem;
-    }
-    .skill-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 1rem;
-      text-align: center;
-      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-      cursor: default;
-    }
-    .skill-item:hover {
-      border-color: var(--accent);
-      transform: translateY(-3px);
-      box-shadow: var(--glow);
-    }
-    .skill-item .skill-name {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--text);
-      letter-spacing: 0.05em;
-    }
-    .skill-item .skill-cat {
-      font-size: 0.6rem;
-      color: var(--muted);
-      margin-top: 0.25rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    .skills-category {
-      margin-bottom: 2.5rem;
-    }
-    .skills-category-label {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--accent3);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-      display: flex; align-items: center; gap: 0.75rem;
-    }
-    .skills-category-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-    /* ── PROJECTS ── */
-    .projects-list { display: flex; flex-direction: column; gap: 2rem; }
-
-    .project-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 2rem;
-      transition: border-color 0.25s, box-shadow 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-    .project-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0;
-      width: 3px; height: 0;
-      background: linear-gradient(180deg, var(--accent), var(--accent2));
-      transition: height 0.35s ease;
-    }
-    .project-card:hover { border-color: rgba(0,200,255,0.4); box-shadow: var(--glow); }
-    .project-card:hover::before { height: 100%; }
-
-    .project-header {
-      display: flex; align-items: flex-start;
-      justify-content: space-between;
-      gap: 1rem; margin-bottom: 1rem;
-    }
-    .project-num {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      white-space: nowrap;
-    }
-    h3.project-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #fff;
-      flex: 1;
-    }
-    .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .project-tag {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.6rem;
-      padding: 0.2rem 0.6rem;
-      background: rgba(0,85,255,0.15);
-      border: 1px solid rgba(0,85,255,0.3);
-      color: var(--accent);
-      border-radius: 2px;
-      letter-spacing: 0.05em;
-    }
-
-    .project-desc { color: #7ba3bf; font-size: 0.88rem; font-weight: 300; }
-
-    .project-detail {
-      margin-top: 1rem;
-      display: none;
-    }
-    .project-card.open .project-detail { display: block; }
-    .project-detail ul {
-      list-style: none; padding: 0; margin: 0.75rem 0;
-    }
-    .project-detail ul li {
-      position: relative; padding-left: 1.2rem;
-      color: #7ba3bf; font-size: 0.85rem; margin-bottom: 0.4rem;
-    }
-    .project-detail ul li::before {
-      content: '›'; position: absolute; left: 0;
-      color: var(--accent); font-size: 0.9rem;
-    }
-    .project-result {
-      margin-top: 1rem; padding: 0.75rem 1rem;
-      background: rgba(0,255,153,0.05);
-      border-left: 2px solid var(--accent3);
-      font-size: 0.84rem; color: #9ecfb0;
-    }
-    .project-tech {
-      margin-top: 0.75rem;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--muted);
-      letter-spacing: 0.05em;
-    }
-    .project-tech span { color: var(--accent2); }
-
-    .project-toggle {
-      background: none; border: 1px solid var(--border);
-      color: var(--muted); cursor: pointer;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.65rem; letter-spacing: 0.1em;
-      padding: 0.35rem 0.8rem; border-radius: 2px;
-      margin-top: 1rem; transition: all 0.2s;
-    }
-    .project-toggle:hover { border-color: var(--accent); color: var(--accent); }
-
-    /* ── ABOUT / INTERESTS ── */
-    .interests-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-    .interest-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 4px; padding: 1.25rem;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .interest-item:hover { border-color: var(--accent3); box-shadow: 0 0 15px rgba(0,255,153,0.1); }
-    .interest-icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
-    .interest-title {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700; font-size: 0.85rem; color: #fff; margin-bottom: 0.3rem;
-    }
-    .interest-desc { font-size: 0.78rem; color: var(--muted); font-weight: 300; }
-
-    /* ── CERTIFICATIONS ── */
-    .certs-grid { display: flex; gap: 1.5rem; flex-wrap: wrap; }
-    .cert-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px; padding: 1.5rem 2rem;
-      flex: 1; min-width: 220px;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      position: relative;
-    }
-    .cert-card::after {
-      content: '✓ VERIFIED';
-      position: absolute; top: 1rem; right: 1rem;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.55rem; color: var(--accent3); letter-spacing: 0.1em;
-    }
-    .cert-card:hover { border-color: var(--accent3); box-shadow: 0 0 20px rgba(0,255,153,0.1); }
-    .cert-name {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700; font-size: 1.05rem; color: #fff; margin-bottom: 0.25rem;
-    }
-    .cert-issuer { font-size: 0.8rem; color: var(--muted); font-family: 'Share Tech Mono', monospace; }
-
-    /* ── FOOTER ── */
+    /* ═══════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════ */
     footer {
-      border-top: 1px solid var(--border);
-      padding: 2rem 3rem;
-      text-align: center;
-      position: relative; z-index: 1;
+      background: var(--ink);
+      padding: 2rem 4rem;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,0.08);
     }
-    .footer-name {
-      font-family: 'Syne', sans-serif;
-      font-size: 0.9rem; color: var(--muted); font-weight: 400;
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.25);
     }
-    .footer-name strong { color: var(--accent); }
+    .footer-copy strong { color: rgba(255,255,255,0.5); }
+    .footer-gh {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      transition: opacity 0.2s;
+    }
+    .footer-gh:hover { opacity: 0.7; }
 
-    /* ── DIVIDERS ── */
-    .section-divider {
-      max-width: 1100px; margin: 0 auto;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border), transparent);
-    }
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
+    /* ═══════════════════════════════════════
+       REVEAL ANIMATION
+    ═══════════════════════════════════════ */
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(22px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
     .reveal {
-      opacity: 0; transform: translateY(24px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
     }
-    .reveal.visible { opacity: 1; transform: none; }
+    .reveal.in { opacity: 1; transform: none; }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 640px) {
-      nav { padding: 1rem; }
+    /* ═══════════════════════════════════════
+       HAMBURGER MENU
+    ═══════════════════════════════════════ */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+      z-index: 600;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 400;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: var(--display);
+      font-size: 3rem;
+      color: var(--ink);
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--accent); }
+    .mobile-menu .mob-cta {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.85rem 2.5rem;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 2px;
+    }
+
+    /* ═══════════════════════════════════════
+       TABLET — 900px
+    ═══════════════════════════════════════ */
+    @media (max-width: 900px) {
+      /* Nav */
+      nav { padding: 1rem 1.5rem; }
       .nav-links { display: none; }
-      .section { padding: 3rem 1.25rem; }
-      #hero { padding: 5rem 1.25rem 3rem; }
-      footer { padding: 1.5rem; }
+      .hamburger { display: flex; }
+
+      /* Hero */
+      #hero { padding: 7rem 1.5rem 3rem; }
+      .hero-bg-text { font-size: clamp(5rem, 25vw, 9rem); }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .btn-primary, .btn-secondary { text-align: center; }
+      .hero-meta { gap: 1.5rem; flex-wrap: wrap; }
+      .hero-stat-num { font-size: 2.2rem; }
+
+      /* Wrap */
+      .wrap { padding: 0 1.5rem; }
+      section { padding: 4.5rem 0; }
+
+      /* About */
+      #about .grid { grid-template-columns: 1fr; gap: 2.5rem; }
+
+      /* Projects */
+      .project-item { grid-template-columns: 48px 1fr; gap: 1rem; }
+      .project-num { font-size: 2.2rem; }
+      .project-top { flex-direction: column; gap: 0.5rem; }
+      .project-tags { flex-wrap: wrap; }
+
+      /* Contact */
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .form-row { grid-template-columns: 1fr; }
+
+      /* Footer */
+      footer { flex-direction: column; gap: 0.75rem; text-align: center; padding: 1.5rem; }
+    }
+
+    /* ═══════════════════════════════════════
+       MOBILE — 480px
+    ═══════════════════════════════════════ */
+    @media (max-width: 480px) {
+      /* Nav */
+      nav { padding: 0.85rem 1.25rem; }
+
+      /* Hero */
+      #hero { padding: 6rem 1.25rem 2.5rem; }
+      h1.hero-name { font-size: clamp(3rem, 15vw, 4.5rem); }
+      .hero-tagline { font-size: 0.92rem; }
+      .hero-bg-text { font-size: clamp(4rem, 30vw, 7rem); bottom: 0; }
+      .hero-meta { gap: 1rem; }
+      .hero-stat-num { font-size: 2rem; }
+      .hero-stat-label { font-size: 0.55rem; }
+
+      /* Wrap */
+      .wrap { padding: 0 1.25rem; }
+      section { padding: 3.5rem 0; }
+      h2.sec-title { font-size: 2.4rem; margin-bottom: 2rem; }
+
+      /* Skills */
+      .skills-tags { gap: 0.5rem; }
+      .skill-tag { font-size: 0.68rem; padding: 0.4rem 0.8rem; }
+
+      /* Projects */
+      .project-item { grid-template-columns: 38px 1fr; gap: 0.75rem; padding: 2rem 0; }
+      .project-num { font-size: 1.8rem; }
+      h3.project-name { font-size: 0.95rem; }
+      .project-summary { font-size: 0.82rem; }
+      .project-detail-inner ul li { font-size: 0.82rem; }
+
+      /* Certs */
+      .cert-row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+
+      /* Contact */
+      .contact-pitch { font-size: 0.9rem; }
+      .clr-value { font-size: 0.82rem; word-break: break-all; }
+      .form-group input,
+      .form-group textarea { font-size: 0.85rem; padding: 0.65rem 0.85rem; }
+      .btn-submit { width: 100%; text-align: center; }
+
+      /* Mobile menu */
+      .mobile-menu a { font-size: 2.4rem; }
+
+      /* Footer */
+      footer { padding: 1.25rem; }
+      .footer-copy, .footer-gh { font-size: 0.6rem; }
+    }
+
+    /* ═══════════════════════════════════════
+       VERY SMALL — 360px
+    ═══════════════════════════════════════ */
+    @media (max-width: 360px) {
+      h1.hero-name { font-size: clamp(2.6rem, 16vw, 3.5rem); }
+      .hero-meta { flex-direction: column; gap: 0.75rem; }
+      .hero-stat-num { font-size: 1.8rem; }
     }
   </style>
 </head>
 <body>
 
+  <!-- CURSOR -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
   <!-- NAV -->
   <nav>
-    <div class="nav-logo">H4RRY<span>PHANTOM</span></div>
+    <div class="nav-id">Oscar <span>DJIHOKIN</span></div>
     <ul class="nav-links">
+      <li><a href="#about">Profil</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#projects">Projets</a></li>
-      <li><a href="#certs">Certifications</a></li>
-      <li><a href="#interests">Intérêts</a></li>
+      <li><a href="#contact" class="nav-cta">Me contacter</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about" onclick="closeMenu()">Profil</a>
+    <a href="#skills" onclick="closeMenu()">Skills</a>
+    <a href="#projects" onclick="closeMenu()">Projets</a>
+    <a href="#contact" class="mob-cta" onclick="closeMenu()">Me contacter</a>
+  </div>
 
   <!-- HERO -->
   <section id="hero">
-    <div class="hero-tag">Étudiant 3ème année — Sécurité Informatique</div>
-    <h1 class="hero-name">
-      <span class="accent">Oscar</span> DJIHOKIN
-      <span class="dim">Cybersecurity · AI · Quantum Physics</span>
-    </h1>
-    <div class="hero-pseudo">H4RRYPHANTOM</div>
-    <p class="hero-bio">
-      Passionné par la compréhension profonde des systèmes informatiques, j'explore la cybersécurité offensive, le reverse engineering et l'analyse bas niveau. En parallèle, je développe des compétences en intelligence artificielle pour la détection d'anomalies et l'automatisation de l'analyse de vulnérabilités. Mon approche repose sur la rigueur, l'apprentissage autonome et la volonté de relier sécurité, mathématiques avancées et physique quantique.
-    </p>
-    <div class="hero-certs">
-      <span class="cert-badge">FCF in Cybersecurity</span>
-      <span class="cert-badge">NHNC-2025</span>
+    <div class="hero-bg-text">PHANTOM</div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Étudiant 3A · Sécurité Informatique · IA · Maths</div>
+      <h1 class="hero-name">
+        Oscar<br>DJIHOKIN
+        <span class="alt">aka H4RRYPHANTOM</span>
+      </h1>
+      <p class="hero-tagline">
+        Je construis des systèmes qui détectent, défendent et comprennent.<br>
+        Cybersécurité offensive, intelligence artificielle appliquée, mathématiques avancées.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn-primary">Voir mes projets</a>
+        <a href="#contact" class="btn-secondary">Travailler ensemble</a>
+        <a href="https://github.com/scardjihokin" target="_blank" class="btn-secondary">github.com/scardjihokin</a>
+      </div>
     </div>
-    <div class="hero-scroll">SCROLL DOWN</div>
+    <div class="hero-meta">
+      <div>
+        <div class="hero-stat-num">5</div>
+        <div class="hero-stat-label">Projets réalisés</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">2</div>
+        <div class="hero-stat-label">Certifications</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">3A</div>
+        <div class="hero-stat-label">Année universitaire</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">3</div>
+        <div class="hero-stat-label">Domaines maîtrisés</div>
+      </div>
+    </div>
   </section>
 
-  <div class="section-divider"></div>
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap">
+      <div class="sec-label reveal">Profil</div>
+      <div class="grid">
+        <div class="about-text reveal reveal-d1">
+          <h2 class="sec-title">Qui<br>suis-je ?</h2>
+          <p>Passionné par la <strong>compréhension profonde des systèmes</strong>, j'ai orienté mon parcours vers la cybersécurité offensive et le reverse engineering — domaines où j'explore l'analyse bas niveau et la logique interne des logiciels.</p>
+          <p>En parallèle, je développe des compétences en <strong>intelligence artificielle</strong> pour appliquer des modèles mathématiques à la détection d'anomalies et à l'automatisation de l'analyse de vulnérabilités.</p>
+          <p>Mon approche repose sur la <strong>rigueur</strong>, l'apprentissage autonome et une volonté constante de relier sécurité, mathématiques avancées et physique quantique.</p>
+        </div>
+        <div class="reveal reveal-d2">
+          <h2 class="sec-title" style="visibility:hidden; height: 0; margin:0;">.</h2>
+          <div class="about-certs">
+            <div class="cert-row">
+              <div>
+                <div class="cert-row-name">FCF in Cybersecurity</div>
+                <div style="font-size:0.72rem; color: var(--muted); margin-top:0.15rem;">Fortinet Certified Fundamentals</div>
+              </div>
+              <span class="cert-row-badge">Certifié</span>
+            </div>
+            <div class="cert-row">
+              <div>
+                <div class="cert-row-name">NHNC-2025-Certificate</div>
+                <div style="font-size:0.72rem; color: var(--muted); margin-top:0.15rem;">Certification 2025</div>
+              </div>
+              <span class="cert-row-badge">Certifié</span>
+            </div>
+            <div class="cert-row" style="border-left-color: #999; margin-top: 0.5rem;">
+              <div>
+                <div class="cert-row-name" style="color: var(--muted);">Objectif 2025 — OSCP / CEH</div>
+                <div style="font-size:0.72rem; color: var(--muted); margin-top:0.15rem;">En cours de préparation</div>
+              </div>
+              <span class="cert-row-badge" style="color: var(--muted); background: var(--warm);">En cours</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- SKILLS -->
-  <section id="skills" class="section">
-    <div class="section-label reveal">Compétences</div>
-    <h2 class="section-title reveal">Stack Technique<span class="line"></span></h2>
-
-    <div class="skills-category reveal">
-      <div class="skills-category-label">Langages & Systèmes</div>
-      <div class="skills-grid">
-        <div class="skill-item"><div class="skill-name">Python</div><div class="skill-cat">Langage</div></div>
-        <div class="skill-item"><div class="skill-name">Linux Ubuntu</div><div class="skill-cat">OS</div></div>
-        <div class="skill-item"><div class="skill-name">Debian</div><div class="skill-cat">OS</div></div>
-        <div class="skill-item"><div class="skill-name">Bash / Shell</div><div class="skill-cat">Scripting</div></div>
-        <div class="skill-item"><div class="skill-name">SQL</div><div class="skill-cat">Données</div></div>
-        <div class="skill-item"><div class="skill-name">LaTeX</div><div class="skill-cat">Rédaction</div></div>
+  <section id="skills">
+    <div class="wrap">
+      <div class="sec-label reveal">Stack</div>
+      <h2 class="sec-title reveal">Compétences<br>Techniques</h2>
+      <div class="skills-block reveal reveal-d1">
+        <div class="skills-block-title">Langages & Systèmes</div>
+        <div class="skills-tags">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">Linux Ubuntu</span>
+          <span class="skill-tag">Debian</span>
+          <span class="skill-tag">Bash / Shell</span>
+          <span class="skill-tag">SQL</span>
+          <span class="skill-tag">LaTeX</span>
+        </div>
       </div>
-    </div>
-
-    <div class="skills-category reveal">
-      <div class="skills-category-label">Sécurité & Réseaux</div>
-      <div class="skills-grid">
-        <div class="skill-item"><div class="skill-name">pfSense</div><div class="skill-cat">Firewall</div></div>
-        <div class="skill-item"><div class="skill-name">Suricata</div><div class="skill-cat">IDS/IPS</div></div>
-        <div class="skill-item"><div class="skill-name">Wireshark</div><div class="skill-cat">Analyse réseau</div></div>
-        <div class="skill-item"><div class="skill-name">Guacamole</div><div class="skill-cat">Accès distant</div></div>
-        <div class="skill-item"><div class="skill-name">Centreon</div><div class="skill-cat">Monitoring</div></div>
-        <div class="skill-item"><div class="skill-name">Nmap</div><div class="skill-cat">Scan réseau</div></div>
+      <div class="skills-block reveal reveal-d2">
+        <div class="skills-block-title">Sécurité & Réseaux</div>
+        <div class="skills-tags">
+          <span class="skill-tag">pfSense</span>
+          <span class="skill-tag">Suricata</span>
+          <span class="skill-tag">Apache Guacamole</span>
+          <span class="skill-tag">Centreon</span>
+          <span class="skill-tag">Wireshark</span>
+          <span class="skill-tag">Nmap</span>
+          <span class="skill-tag">SNMP</span>
+          <span class="skill-tag">TLS / SSL</span>
+        </div>
       </div>
-    </div>
-
-    <div class="skills-category reveal">
-      <div class="skills-category-label">Intelligence Artificielle</div>
-      <div class="skills-grid">
-        <div class="skill-item"><div class="skill-name">scikit-learn</div><div class="skill-cat">ML</div></div>
-        <div class="skill-item"><div class="skill-name">pandas</div><div class="skill-cat">Data</div></div>
-        <div class="skill-item"><div class="skill-name">matplotlib</div><div class="skill-cat">Visualisation</div></div>
-        <div class="skill-item"><div class="skill-name">Random Forest</div><div class="skill-cat">Algo</div></div>
-        <div class="skill-item"><div class="skill-name">Régression Log.</div><div class="skill-cat">Algo</div></div>
-        <div class="skill-item"><div class="skill-name">Numpy</div><div class="skill-cat">Calcul</div></div>
+      <div class="skills-block reveal reveal-d3">
+        <div class="skills-block-title">Intelligence Artificielle & Data</div>
+        <div class="skills-tags">
+          <span class="skill-tag">scikit-learn</span>
+          <span class="skill-tag">pandas</span>
+          <span class="skill-tag">NumPy</span>
+          <span class="skill-tag">matplotlib</span>
+          <span class="skill-tag">Random Forest</span>
+          <span class="skill-tag">Régression Logistique</span>
+          <span class="skill-tag">Validation croisée</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <div class="section-divider"></div>
-
   <!-- PROJECTS -->
-  <section id="projects" class="section">
-    <div class="section-label reveal">Réalisations</div>
-    <h2 class="section-title reveal">Projets<span class="line"></span></h2>
-
-    <div class="projects-list">
+  <section id="projects">
+    <div class="wrap">
+      <div class="sec-label reveal">Réalisations</div>
+      <h2 class="sec-title reveal">Projets</h2>
 
       <!-- P1 -->
-      <div class="project-card reveal">
-        <div class="project-header">
-          <div>
-            <div class="project-num">// PROJECT_01</div>
-            <h3 class="project-title">Détection d'Anomalies Réseau par Machine Learning</h3>
+      <div class="project-item reveal" onclick="toggleProject(this)">
+        <div class="project-num">01</div>
+        <div class="project-body">
+          <div class="project-top">
+            <h3 class="project-name">Détection d'Anomalies Réseau par Machine Learning</h3>
+            <div class="project-tags">
+              <span class="ptag">Python</span><span class="ptag">ML</span><span class="ptag">CyberSec</span>
+            </div>
           </div>
-          <div class="project-tags">
-            <span class="project-tag">Python</span>
-            <span class="project-tag">ML</span>
-            <span class="project-tag">CyberSec</span>
+          <p class="project-summary">Identifier automatiquement du trafic réseau suspect à partir de jeux de données structurés grâce à des modèles supervisés.</p>
+          <div class="project-detail">
+            <div class="project-detail-inner">
+              <ul>
+                <li>Collecte, nettoyage et normalisation des données réseau</li>
+                <li>Sélection de variables par analyse de corrélation et importance des features</li>
+                <li>Entraînement : Régression Logistique et Random Forest</li>
+                <li>Évaluation via précision, rappel, F1-score et validation croisée k-fold</li>
+              </ul>
+              <div class="project-result-box">Prototype distinguant trafic normal et malveillant avec métriques interprétables. Démontre l'intégration concrète de l'IA en cybersécurité.</div>
+              <div class="project-stack"><strong>Stack :</strong> Python · scikit-learn · pandas · matplotlib</div>
+            </div>
           </div>
+          <button class="project-toggle-btn">Voir les détails +</button>
         </div>
-        <p class="project-desc">Identifier automatiquement du trafic réseau suspect à partir de jeux de données structurés, en appliquant des modèles supervisés de machine learning.</p>
-        <div class="project-detail">
-          <ul>
-            <li>Collecte, nettoyage et normalisation des données réseau</li>
-            <li>Sélection de variables par analyse de corrélation et importance des features</li>
-            <li>Entraînement de modèles supervisés : Régression Logistique et Random Forest</li>
-            <li>Comparaison des performances via précision, rappel, F1-score</li>
-            <li>Validation croisée k-fold pour robustesse du modèle</li>
-          </ul>
-          <div class="project-result">
-            Prototype fonctionnel distinguant trafic normal et malveillant avec métriques mesurables et interprétables. Démontre l'intégration concrète de l'IA en cybersécurité.
-          </div>
-          <div class="project-tech"><span>Technologies :</span> Python · scikit-learn · pandas · matplotlib</div>
-        </div>
-        <button class="project-toggle" onclick="toggleProject(this)">VOIR DÉTAILS ↓</button>
       </div>
 
       <!-- P2 -->
-      <div class="project-card reveal">
-        <div class="project-header">
-          <div>
-            <div class="project-num">// PROJECT_02</div>
-            <h3 class="project-title">Déploiement d'un Portail Captif avec pfSense</h3>
+      <div class="project-item reveal" onclick="toggleProject(this)">
+        <div class="project-num">02</div>
+        <div class="project-body">
+          <div class="project-top">
+            <h3 class="project-name">Déploiement d'un Portail Captif avec pfSense</h3>
+            <div class="project-tags">
+              <span class="ptag">pfSense</span><span class="ptag">Réseau</span>
+            </div>
           </div>
-          <div class="project-tags">
-            <span class="project-tag">pfSense</span>
-            <span class="project-tag">Réseau</span>
-            <span class="project-tag">Auth</span>
+          <p class="project-summary">Contrôler et sécuriser l'accès réseau Wi-Fi en forçant l'authentification des utilisateurs avant tout accès Internet.</p>
+          <div class="project-detail">
+            <div class="project-detail-inner">
+              <ul>
+                <li>Installation et configuration de pfSense comme pare-feu/routeur</li>
+                <li>Portail captif : zones, règles d'accès, durée de session</li>
+                <li>Authentification locale et redirections HTTPS</li>
+                <li>Tests : blocage non authentifié et journalisation des connexions</li>
+              </ul>
+              <div class="project-result-box">Portail fonctionnel avec gestion granulaire des accès et journalisation complète des sessions.</div>
+              <div class="project-stack"><strong>Stack :</strong> pfSense · DHCP · DNS · HTTPS · Règles Firewall</div>
+            </div>
           </div>
+          <button class="project-toggle-btn">Voir les détails +</button>
         </div>
-        <p class="project-desc">Contrôler et sécuriser l'accès au réseau Wi-Fi en forçant l'authentification des utilisateurs avant tout accès Internet.</p>
-        <div class="project-detail">
-          <ul>
-            <li>Installation et configuration de pfSense comme pare-feu/routeur de périmètre</li>
-            <li>Activation du portail captif : zones, règles d'accès, durée de session</li>
-            <li>Intégration d'une authentification locale et redirections HTTPS</li>
-            <li>Tests de validation : blocage d'accès non authentifié et journalisation des connexions</li>
-          </ul>
-          <div class="project-result">
-            Portail captif fonctionnel permettant une gestion granulaire des accès réseau avec journalisation complète des sessions.
-          </div>
-          <div class="project-tech"><span>Technologies :</span> pfSense · DHCP · DNS · HTTPS · Règles Firewall</div>
-        </div>
-        <button class="project-toggle" onclick="toggleProject(this)">VOIR DÉTAILS ↓</button>
       </div>
 
       <!-- P3 -->
-      <div class="project-card reveal">
-        <div class="project-header">
-          <div>
-            <div class="project-num">// PROJECT_03</div>
-            <h3 class="project-title">Système de Monitoring Réseau avec Centreon</h3>
+      <div class="project-item reveal" onclick="toggleProject(this)">
+        <div class="project-num">03</div>
+        <div class="project-body">
+          <div class="project-top">
+            <h3 class="project-name">Système de Monitoring Réseau avec Centreon</h3>
+            <div class="project-tags">
+              <span class="ptag">Centreon</span><span class="ptag">SNMP</span><span class="ptag">Linux</span>
+            </div>
           </div>
-          <div class="project-tags">
-            <span class="project-tag">Centreon</span>
-            <span class="project-tag">SNMP</span>
-            <span class="project-tag">Monitoring</span>
+          <p class="project-summary">Supervision continue des équipements réseau et services pour détecter toute anomalie ou panne en temps réel.</p>
+          <div class="project-detail">
+            <div class="project-detail-inner">
+              <ul>
+                <li>Déploiement Centreon Central + Poller sur Linux</li>
+                <li>Ajout des hôtes et services à superviser</li>
+                <li>Seuils d'alerte WARNING/CRITICAL et notifications e-mail</li>
+                <li>Tableaux de bord et graphiques de performance personnalisés</li>
+              </ul>
+              <div class="project-result-box">Infrastructure de monitoring opérationnelle avec visibilité complète et alertes automatisées.</div>
+              <div class="project-stack"><strong>Stack :</strong> Centreon · SNMP · Nagios Core · NRPE · Linux</div>
+            </div>
           </div>
+          <button class="project-toggle-btn">Voir les détails +</button>
         </div>
-        <p class="project-desc">Assurer une supervision continue des équipements réseau et des services pour détecter toute anomalie ou panne en temps réel.</p>
-        <div class="project-detail">
-          <ul>
-            <li>Installation de Centreon (Central + Poller) sur environnement Linux</li>
-            <li>Découverte et ajout des hôtes, équipements et services à superviser</li>
-            <li>Configuration des seuils d'alerte WARNING/CRITICAL et notifications e-mail</li>
-            <li>Tableaux de bord personnalisés et graphiques de performance</li>
-            <li>Tests de panne et vérification des remontées d'alertes en temps réel</li>
-          </ul>
-          <div class="project-result">
-            Infrastructure de monitoring opérationnelle avec visibilité complète sur l'état du réseau et alertes automatisées.
-          </div>
-          <div class="project-tech"><span>Technologies :</span> Centreon · SNMP · Nagios Core · Linux · NRPE</div>
-        </div>
-        <button class="project-toggle" onclick="toggleProject(this)">VOIR DÉTAILS ↓</button>
       </div>
 
       <!-- P4 -->
-      <div class="project-card reveal">
-        <div class="project-header">
-          <div>
-            <div class="project-num">// PROJECT_04</div>
-            <h3 class="project-title">Système d'Autorisation d'Accès avec Apache Guacamole</h3>
+      <div class="project-item reveal" onclick="toggleProject(this)">
+        <div class="project-num">04</div>
+        <div class="project-body">
+          <div class="project-top">
+            <h3 class="project-name">Accès Distant Sécurisé avec Apache Guacamole</h3>
+            <div class="project-tags">
+              <span class="ptag">Guacamole</span><span class="ptag">RDP/SSH</span><span class="ptag">TLS</span>
+            </div>
           </div>
-          <div class="project-tags">
-            <span class="project-tag">Guacamole</span>
-            <span class="project-tag">RDP/SSH</span>
-            <span class="project-tag">TLS</span>
+          <p class="project-summary">Centraliser l'accès distant aux machines internes sans exposer directement les protocoles RDP/SSH/VNC.</p>
+          <div class="project-detail">
+            <div class="project-detail-inner">
+              <ul>
+                <li>Déploiement Guacamole server + client sur Linux</li>
+                <li>Reverse proxy Nginx en HTTPS avec certificat TLS</li>
+                <li>Gestion des utilisateurs, groupes et droits d'accès</li>
+                <li>Intégration RDP (Windows), SSH (Linux), VNC dans l'interface web</li>
+              </ul>
+              <div class="project-result-box">Portail centralisé, sécurisé et auditable — élimine le besoin d'un VPN dédié par utilisateur.</div>
+              <div class="project-stack"><strong>Stack :</strong> Apache Guacamole · RDP · SSH · VNC · Nginx · TLS/SSL</div>
+            </div>
           </div>
+          <button class="project-toggle-btn">Voir les détails +</button>
         </div>
-        <p class="project-desc">Centraliser et sécuriser l'accès distant aux machines internes sans exposer directement les protocoles RDP/SSH/VNC.</p>
-        <div class="project-detail">
-          <ul>
-            <li>Déploiement de Guacamole (server + client) sur serveur Linux</li>
-            <li>Configuration du reverse proxy Nginx en HTTPS avec certificat TLS</li>
-            <li>Gestion des utilisateurs, groupes et droits d'accès par connexion</li>
-            <li>Intégration des protocoles RDP (Windows), SSH (Linux) et VNC dans l'interface web</li>
-            <li>Validation des accès cloisonnés : chaque utilisateur ne voit que ses ressources</li>
-          </ul>
-          <div class="project-result">
-            Portail d'accès distant centralisé, sécurisé et auditable, éliminant le besoin d'un VPN dédié par utilisateur.
-          </div>
-          <div class="project-tech"><span>Technologies :</span> Apache Guacamole · RDP · SSH · VNC · Nginx · TLS/SSL</div>
-        </div>
-        <button class="project-toggle" onclick="toggleProject(this)">VOIR DÉTAILS ↓</button>
       </div>
 
       <!-- P5 -->
-      <div class="project-card reveal">
-        <div class="project-header">
-          <div>
-            <div class="project-num">// PROJECT_05</div>
-            <h3 class="project-title">Système de Détection d'Intrusion avec Suricata</h3>
+      <div class="project-item reveal" onclick="toggleProject(this)">
+        <div class="project-num">05</div>
+        <div class="project-body">
+          <div class="project-top">
+            <h3 class="project-name">Système de Détection d'Intrusion avec Suricata</h3>
+            <div class="project-tags">
+              <span class="ptag">Suricata</span><span class="ptag">IDS</span><span class="ptag">Linux</span>
+            </div>
           </div>
-          <div class="project-tags">
-            <span class="project-tag">Suricata</span>
-            <span class="project-tag">IDS</span>
-            <span class="project-tag">Linux</span>
+          <p class="project-summary">Détecter en temps réel les attaques réseau et activités malveillantes au sein d'une infrastructure.</p>
+          <div class="project-detail">
+            <div class="project-detail-inner">
+              <ul>
+                <li>Configuration Suricata en mode IDS sur interface réseau</li>
+                <li>Règles Emerging Threats + règles personnalisées</li>
+                <li>Analyse des logs EVE JSON et catégorisation des alertes</li>
+                <li>Tests : scan Nmap, injections, flood ICMP</li>
+              </ul>
+              <div class="project-result-box">IDS opérationnel détectant les comportements malveillants avec faible taux de faux positifs.</div>
+              <div class="project-stack"><strong>Stack :</strong> Suricata · EVE JSON · Emerging Threats · tcpdump · Linux</div>
+            </div>
           </div>
+          <button class="project-toggle-btn">Voir les détails +</button>
         </div>
-        <p class="project-desc">Détecter en temps réel les attaques réseau et activités malveillantes au sein d'une infrastructure grâce à un IDS basé sur des règles.</p>
-        <div class="project-detail">
-          <ul>
-            <li>Installation et configuration de Suricata en mode IDS sur interface réseau</li>
-            <li>Chargement et personnalisation des règles Emerging Threats + règles maison</li>
-            <li>Analyse des logs EVE JSON pour catégorisation des alertes</li>
-            <li>Tests de validation : scan Nmap, injections, flood ICMP</li>
-            <li>Intégration des logs avec système de centralisation pour corrélation d'événements</li>
-          </ul>
-          <div class="project-result">
-            Système IDS opérationnel détectant et alertant sur des comportements malveillants avec un faible taux de faux positifs.
-          </div>
-          <div class="project-tech"><span>Technologies :</span> Suricata · EVE JSON · Emerging Threats · tcpdump · Linux</div>
-        </div>
-        <button class="project-toggle" onclick="toggleProject(this)">VOIR DÉTAILS ↓</button>
       </div>
 
     </div>
   </section>
 
-  <div class="section-divider"></div>
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="sec-label reveal">Contact</div>
+      <h2 class="sec-title reveal">Travaillons<br>Ensemble</h2>
+      <div class="contact-grid">
 
-  <!-- CERTIFICATIONS -->
-  <section id="certs" class="section">
-    <div class="section-label reveal">Accréditations</div>
-    <h2 class="section-title reveal">Certifications<span class="line"></span></h2>
-    <div class="certs-grid reveal">
-      <div class="cert-card">
-        <div class="cert-name">FCF in Cybersecurity</div>
-        <div class="cert-issuer">Fortinet Certified Fundamentals</div>
-      </div>
-      <div class="cert-card">
-        <div class="cert-name">NHNC-2025</div>
-        <div class="cert-issuer">Certificate — 2025</div>
-      </div>
-    </div>
-  </section>
+        <div class="reveal reveal-d1">
+          <p class="contact-pitch">
+            Vous cherchez un profil technique, curieux et rigoureux pour un stage, un projet ou une collaboration ? Je suis disponible et motivé. N'hésitez pas à me contacter directement.
+          </p>
+          <div class="contact-links">
+            <a href="mailto:oscardjihokin6@gmail.com" class="contact-link-row">
+              <div>
+                <div class="clr-label">Email</div>
+                <div class="clr-value">oscardjihokin6@gmail.com</div>
+              </div>
+              <div class="clr-arrow">→</div>
+            </a>
+            <a href="https://linkedin.com/in/oscar-djihokin" target="_blank" class="contact-link-row">
+              <div>
+                <div class="clr-label">LinkedIn</div>
+                <div class="clr-value">Oscar DJIHOKIN</div>
+              </div>
+              <div class="clr-arrow">→</div>
+            </a>
+            <a href="https://github.com/scardjihokin" target="_blank" class="contact-link-row">
+              <div>
+                <div class="clr-label">GitHub</div>
+                <div class="clr-value">scardjihokin</div>
+              </div>
+              <div class="clr-arrow">→</div>
+            </a>
+          </div>
+        </div>
 
-  <div class="section-divider"></div>
+        <div class="reveal reveal-d2">
+          <form class="contact-form" action="https://formspree.io/f/xreadddg" method="POST" onsubmit="submitForm(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fname">Prénom</label>
+                <input type="text" id="fname" placeholder="Jean" required/>
+              </div>
+              <div class="form-group">
+                <label for="fmail">Email</label>
+                <input type="email" id="fmail" placeholder="jean@exemple.com" required/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="fsubject">Sujet</label>
+              <input type="text" id="fsubject" placeholder="Proposition de stage, collaboration..." required/>
+            </div>
+            <div class="form-group">
+              <label for="fmsg">Message</label>
+              <textarea id="fmsg" placeholder="Décrivez votre projet ou votre besoin..." required></textarea>
+            </div>
+            <button type="submit" class="btn-submit">Envoyer le message</button>
+            <div id="form-success">Message envoyé — je vous répondrai rapidement.</div>
+          </form>
+        </div>
 
-  <!-- INTERESTS -->
-  <section id="interests" class="section">
-    <div class="section-label reveal">Recherches & Passions</div>
-    <h2 class="section-title reveal">Centres d'Intérêt<span class="line"></span></h2>
-    <div class="interests-grid reveal">
-      <div class="interest-item">
-        <div class="interest-icon">⚔️</div>
-        <div class="interest-title">Cybersécurité Offensive</div>
-        <div class="interest-desc">Pentesting, exploitation de vulnérabilités, analyse de malwares</div>
-      </div>
-      <div class="interest-item">
-        <div class="interest-icon">🔬</div>
-        <div class="interest-title">Reverse Engineering</div>
-        <div class="interest-desc">Analyse bas niveau, assembleur, désassemblage binaire</div>
-      </div>
-      <div class="interest-item">
-        <div class="interest-icon">🤖</div>
-        <div class="interest-title">Intelligence Artificielle</div>
-        <div class="interest-desc">Apprentissage autonome, LLMs, modèles génératifs</div>
-      </div>
-      <div class="interest-item">
-        <div class="interest-icon">∑</div>
-        <div class="interest-title">Mathématiques</div>
-        <div class="interest-desc">Algèbre linéaire, probabilités, analyse, topologie</div>
-      </div>
-      <div class="interest-item">
-        <div class="interest-icon">⚛️</div>
-        <div class="interest-title">Physique Quantique</div>
-        <div class="interest-desc">Mécanique quantique, intrication, cryptographie quantique</div>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-name"><strong>Oscar DJIHOKIN</strong> — H4RRYPHANTOM · Étudiant 3ème année en Cybersécurité</div>
+    <div class="footer-copy"><strong>Oscar DJIHOKIN</strong> — H4RRYPHANTOM · Portfolio 2025</div>
+    <a href="https://github.com/scardjihokin" target="_blank" class="footer-gh">github.com/scardjihokin</a>
   </footer>
 
   <script>
-    // Toggle project details
-    function toggleProject(btn) {
-      const card = btn.closest('.project-card');
-      card.classList.toggle('open');
-      btn.textContent = card.classList.contains('open') ? 'MASQUER ↑' : 'VOIR DÉTAILS ↓';
+    /* ── HAMBURGER ── */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
+    function closeMenu() {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
     }
 
-    // Scroll reveal
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          observer.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12 });
+    /* ── CURSOR ── */
+    const cur = document.getElementById('cursor');
+    const ring = document.getElementById('cursor-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    function animCursor() {
+      cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+      rx += (mx - rx) * 0.15; ry += (my - ry) * 0.15;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(animCursor);
+    }
+    animCursor();
 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    /* ── SCROLL REVEAL ── */
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    /* ── PROJECTS TOGGLE ── */
+    function toggleProject(item) {
+      const detail = item.querySelector('.project-detail');
+      const btn = item.querySelector('.project-toggle-btn');
+      const isOpen = detail.classList.contains('open');
+      detail.classList.toggle('open');
+      btn.textContent = isOpen ? 'Voir les détails +' : 'Masquer —';
+    }
+
+    /* ── FORM ── */
+    function submitForm(e) {
+      // Let Formspree handle the real submission
+      document.getElementById('form-success').style.display = 'block';
+      setTimeout(() => { document.getElementById('form-success').style.display = 'none'; }, 5000);
+    }
+
+    /* ── HIDE CURSOR ON MOBILE ── */
+    if ('ontouchstart' in window) {
+      cur.style.display = 'none';
+      ring.style.display = 'none';
+    }
   </script>
 </body>
 </html>
